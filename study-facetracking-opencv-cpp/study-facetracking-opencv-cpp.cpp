@@ -26,7 +26,7 @@ int main()
 
     cv::CascadeClassifier cascade;
 
-    cascade.load("");
+    cascade.load("C:/pl-lib/C++/opencv/sources/data/haarcascades/haarcascade_frontalface_default.xml");
 
     std::vector<cv::Rect> faces;
 
