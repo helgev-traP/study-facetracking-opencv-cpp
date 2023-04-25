@@ -34,7 +34,7 @@ int main()
     catch (cv::Exception &e)
     {
         const char *err_msg = e.what();
-        cout << "\n-----------\n"
+        cout << "\n-----1-----\n"
              << err_msg << "\n-----------\n"
              << endl;
     }
@@ -46,7 +46,7 @@ int main()
     catch (cv::Exception &e)
     {
         const char *err_msg = e.what();
-        cout << "\n-----------\n"
+        cout << "\n-----2-----\n"
              << err_msg << "\n-----------\n"
              << endl;
     }
@@ -61,12 +61,14 @@ int main()
     catch (cv::Exception &e)
     {
         const char *err_msg = e.what();
-        cout << "\n-----------\n"
+        cout << "\n-----3-----\n"
              << err_msg << "\n-----------\n"
              << endl;
     }
 
     cv::imshow("win", frame);
+
+    cv::waitKey(1);
 
     return 0;
 }
