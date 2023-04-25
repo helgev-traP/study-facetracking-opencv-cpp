@@ -1,0 +1,4 @@
+﻿  study-facetracking-opencv-cpp.cpp
+C:\pl-lib\C++\opencv\build\include\opencv2\calib3d.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\pl-lib\C++\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+  study-facetracking-opencv-cpp.vcxproj -> C:\0_Program\studies\study-facetracking-opencv-cpp\x64\Debug\study-facetracking-opencv-cpp.exe

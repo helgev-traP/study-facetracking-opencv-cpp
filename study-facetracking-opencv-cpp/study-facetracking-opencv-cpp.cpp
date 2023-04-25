@@ -1,20 +1,69 @@
-﻿// study-facetracking-opencv-cpp.cpp : このファイルには 'main' 関数が含まれています。プログラム実行の開始と終了がそこで行われます。
-//
+﻿#include <iostream>
+#include <string>
+// container
+#include <vector>
+// OpenCV
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 
-#include <iostream>
+#define ll long long
 
 int main()
 {
-    std::cout << "Hello World!\n";
+
+    // デバイスのオープン
+    cv::VideoCapture cap(0);
+
+    // カメラデバイスが正常にオープンしたか確認．
+    if (!cap.isOpened())
+    {
+        // 読み込みに失敗したときの処理
+        return -1;
+    }
+
+    // 取得したフレーム
+    cv::Mat frame;
+
+    // カスケード分類器格納場所
+    cv::CascadeClassifier cascade;
+
+    // 正面顔情報が入っているカスケード
+    cascade.load("C:/pl-lib/c++/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
+
+    // 輪郭情報を格納場所
+    std::vector<cv::Rect> faces;
+    std::cout<<"reached\n";
+
+    // 無限ループ
+    while (1)
+    {
+        // USBカメラが得た動画の１フレームを格納
+        cap >> frame;
+
+        // 格納されたフレームに対してカスケードファイルに基づいて顔を検知
+        cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
+
+        // 検出した顔の個数"faces.size()"分ループを行う
+        for (int i = 0; i < faces.size(); i++)
+        {
+            // 検出した顔を赤色矩形で囲む
+            rectangle(frame, cv::Point(faces[i].x, faces[i].y), cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), cv::Scalar(0, 0, 255), 3);
+        }
+
+        // 画像を表示．
+        imshow("win", frame);
+
+        // キーボード入力を受け付ける
+        const int key = cv::waitKey(1);
+
+        // qボタンが押されたとき
+        if (key == 'q' /*113*/)
+        {
+            break; // whileループから抜ける．
+        }
+    }
+    // すべてのウィンドウを閉じる
+    cv::destroyAllWindows();
+
+    return 0;
 }
-
-// プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー
-// プログラムのデバッグ: F5 または [デバッグ] > [デバッグの開始] メニュー
-
-// 作業を開始するためのヒント: 
-//    1. ソリューション エクスプローラー ウィンドウを使用してファイルを追加/管理します 
-//   2. チーム エクスプローラー ウィンドウを使用してソース管理に接続します
-//   3. 出力ウィンドウを使用して、ビルド出力とその他のメッセージを表示します
-//   4. エラー一覧ウィンドウを使用してエラーを表示します
-//   5. [プロジェクト] > [新しい項目の追加] と移動して新しいコード ファイルを作成するか、[プロジェクト] > [既存の項目の追加] と移動して既存のコード ファイルをプロジェクトに追加します
-//   6. 後ほどこのプロジェクトを再び開く場合、[ファイル] > [開く] > [プロジェクト] と移動して .sln ファイルを選択します
