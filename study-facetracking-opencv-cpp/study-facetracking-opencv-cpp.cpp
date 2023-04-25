@@ -8,6 +8,7 @@
 
 using std::cin;
 using std::cout;
+using std::endl;
 
 #define ll long long
 
@@ -26,7 +27,15 @@ int main()
 
     cv::CascadeClassifier cascade;
 
-    cascade.load("C:/pl-lib/C++/opencv/build/etc/haarcascades/haarcascade_frontalface_default.xml");
+    try
+    {
+        cascade.load("C:/pl-lib/C++/opencv/build/etc/haarcascades/haarcascade_frontalface_default.xml");
+    }
+    catch (cv::Exception &e)
+    {
+        const char *err_msg = e.what();
+        cout<<err_msg<<endl;
+    }
 
     std::vector<cv::Rect> faces;
 
