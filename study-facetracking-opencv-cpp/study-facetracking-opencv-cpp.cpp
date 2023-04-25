@@ -22,17 +22,22 @@ int main()
 
     cv::Mat frame;
 
-    while (1)
-    {
-        cap >> frame;
-        cv::imshow("cap", frame);
+    cap >> frame;
 
-        const int key = cv::waitKey(1);
-        if (key == 'q')
-        {
-            break;
-        }
+    cv::CascadeClassifier cascade;
+
+    cascade.load("");
+
+    std::vector<cv::Rect> faces;
+
+    cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
+
+    for (int i = 0; i < faces.size(); i++)
+    {
+        cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y), cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), cv::Scalar(0, 0, 255), 3);
     }
-    cv::destroyAllWindows();
+
+    cv::imshow("win", frame);
+
     return 0;
 }
