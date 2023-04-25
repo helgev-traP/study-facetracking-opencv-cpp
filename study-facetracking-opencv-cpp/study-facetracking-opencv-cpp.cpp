@@ -29,21 +29,41 @@ int main()
 
     try
     {
-        cascade.load("C:/pl-lib/C++/opencv/build/etc/haarcascades/haarcascade_frontalface_default.xml");
+        cascade.load("C:/pl-lib/Cpp/opencv/build/etc/haarcascades/haarcascade_frontalface_alt.xml");
     }
     catch (cv::Exception &e)
     {
         const char *err_msg = e.what();
-        cout<<err_msg<<endl;
+        cout << "\n-----------\n"
+             << err_msg << "\n-----------\n"
+             << endl;
+    }
+    std::vector<cv::Rect> faces;
+    try
+    {
+        cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
+    }
+    catch (cv::Exception &e)
+    {
+        const char *err_msg = e.what();
+        cout << "\n-----------\n"
+             << err_msg << "\n-----------\n"
+             << endl;
     }
 
-    std::vector<cv::Rect> faces;
-
-    cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
-
-    for (int i = 0; i < faces.size(); i++)
+    try
     {
-        cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y), cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), cv::Scalar(0, 0, 255), 3);
+        for (int i = 0; i < faces.size(); i++)
+        {
+            cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y), cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), cv::Scalar(0, 0, 255), 3);
+        }
+    }
+    catch (cv::Exception &e)
+    {
+        const char *err_msg = e.what();
+        cout << "\n-----------\n"
+             << err_msg << "\n-----------\n"
+             << endl;
     }
 
     cv::imshow("win", frame);
