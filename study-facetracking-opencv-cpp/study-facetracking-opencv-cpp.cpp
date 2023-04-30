@@ -23,52 +23,28 @@ int main()
 
     cv::Mat frame;
 
-    cap >> frame;
-
     cv::CascadeClassifier cascade;
+    cascade.load("../haarcascades/haarcascade_frontalface_alt.xml");
 
-    try
+    while (1)
     {
-        cascade.load("C:/pl-lib/Cpp/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
-    }
-    catch (cv::Exception &e)
-    {
-        const char *err_msg = e.what();
-        cout << "\n-----1-----\n"
-             << err_msg << "\n-----------\n"
-             << endl;
-    }
-    std::vector<cv::Rect> faces;
-    try
-    {
+        cap >> frame;
+        std::vector<cv::Rect> faces;
         cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
-    }
-    catch (cv::Exception &e)
-    {
-        const char *err_msg = e.what();
-        cout << "\n-----2-----\n"
-             << err_msg << "\n-----------\n"
-             << endl;
-    }
 
-    try
-    {
         for (int i = 0; i < faces.size(); i++)
         {
             cv::rectangle(frame, cv::Point(faces[i].x, faces[i].y), cv::Point(faces[i].x + faces[i].width, faces[i].y + faces[i].height), cv::Scalar(0, 0, 255), 3);
         }
-    }
-    catch (cv::Exception &e)
-    {
-        const char *err_msg = e.what();
-        cout << "\n-----3-----\n"
-             << err_msg << "\n-----------\n"
-             << endl;
+        cv::imshow("win", frame);
+        const int key = cv::waitKey(1);
+        if (key == 'q' /*113*/)
+        {
+            break;
+        }
     }
 
-    cv::imshow("win", frame);
-
-    cv::waitKey(1);
+    cv::destroyAllWindows();
 
     return 0;
 }
