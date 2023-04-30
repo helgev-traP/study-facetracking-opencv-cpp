@@ -29,7 +29,7 @@ int main()
 
     try
     {
-        cascade.load("C:/pl-lib/Cpp/opencv/build/etc/haarcascades/haarcascade_frontalface_alt.xml");
+        cascade.load("C:/pl-lib/Cpp/opencv/sources/data/haarcascades/haarcascade_frontalface_alt.xml");
     }
     catch (cv::Exception &e)
     {
