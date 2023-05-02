@@ -55,13 +55,14 @@ struct head_position
     double distance;
 };
 
-
 // --- function
 
 head_position poler_coordes(face_coordinates face, camera_info info)
 // 入力: face_coordinates, camera_info
 // 出力: (正面を0とし、カメラから右側・上側を正として) 横の角度, 縦の角度, 距離
 {
+    head_position pass;
+    return pass;
 }
 
 int main()
@@ -76,7 +77,7 @@ int main()
     cv::Mat frame;
 
     cv::CascadeClassifier cascade;
-    cascade.load("../haarcascades/haarcascade_eye_tree_eyeglasses.xml");
+    cascade.load("../haarcascades/haarcascade_frontalface_alt2.xml");
 
     // カメラの情報と基本の位置での顔の大きさを記録しておく
     camera_info cam_info;
