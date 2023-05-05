@@ -47,40 +47,56 @@ struct FaceCoordinates
     }
 };
 
-struct CameraInfo
+class CameraInfo
 {
+public:
     struct Camera
     {
         int width;
         int height;
         double angle_of_view;
-        double tan_2_angle;
     };
     Camera camera;
     // カメラの正面で、Ncm離したときの顔の大きさ(縦横の平均)
     double std_distance;
     double face_size;
+    double dis_x_tan;
+
+private:
+    bool camera_info_setted = false;
+    bool par_setted = false;
+
+public:
     // setter
     void setCameraInfo(int width, int height, double angle_of_view)
     {
         camera.width = width;
         camera.height = height;
         camera.angle_of_view = angle_of_view;
-        camera.tan_2_angle = std::pow(std::tan(angle_of_view), 2);
+        if (par_setted == true)
+        {
+            dis_x_tan = std_distance * std::tan(camera.angle_of_view);
+        }
+        camera_info_setted = true;
     }
-    void setStdPar(double distance, double size)
+    void setPar(double distance, double size)
     {
         std_distance = distance;
         face_size = size;
+        if (camera_info_setted == true)
+        {
+            dis_x_tan = std_distance * std::tan(camera.angle_of_view);
+        }
+        par_setted = true;
     }
 };
 
 struct HeadPosition
 {
-    double x;        // 水平 右側が正
-    double y;        // 鉛直 上が正
-    double z;        // 奥行
-    double distance; // 距離
+    double x; // 水平 右側が正
+    double y; // 鉛直 上が正
+    double z; // 奥行
+    // double distance; // 距離
 };
 
 // --- function
@@ -88,12 +104,16 @@ struct HeadPosition
 HeadPosition PolerCoordes(FaceCoordinates face, CameraInfo info)
 // func 頭の位置検出
 // 入力: FaceCoordinates, CameraInfo
-// 出力: (正面を0とし、カメラから右側・上側を正として) 横の角度, 縦の角度, 距離
+// 出力: HeadPosition
 {
     HeadPosition head_pos;
-    head_pos.x = info.std_distance * (info.face_size / face.face_size()) *
-                 std::sqrt(std::pow(face.center.x, 2) * info.camera.tan_2_angle /
-                           (std::pow(info.camera.width, 2) + std::pow(face.center.x, 2) * info.camera.tan_2_angle));
+    head_pos.x = info.std_distance * info.dis_x_tan *
+                 (face.center.x / info.camera.width) *
+                 (info.face_size / face.face_size());
+    head_pos.y = info.std_distance * info.dis_x_tan *
+                 (face.center.y / info.camera.width) *
+                 (info.face_size / face.face_size());
+    head_pos.z = info.std_distance * (info.face_size / face.face_size());
     return head_pos;
 }
 
@@ -165,7 +185,7 @@ int main()
         {
             if (isLargest != -1)
             {
-                cam_info.setStdPar(distance, faces[isLargest].width + faces[isLargest].height);
+                cam_info.setPar(distance, faces[isLargest].width + faces[isLargest].height);
                 break;
             }
             else
