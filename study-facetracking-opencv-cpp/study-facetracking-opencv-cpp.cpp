@@ -181,7 +181,7 @@ int main()
         cv::imshow("win", frame);
         // break
         const int key = cv::waitKey(33);
-        if (key == -1)
+        if (key != -1)
         {
             if (isLargest != -1)
             {
