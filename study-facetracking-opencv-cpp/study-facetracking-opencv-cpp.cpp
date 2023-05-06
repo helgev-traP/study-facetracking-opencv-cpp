@@ -22,6 +22,21 @@ using std::endl;
 
 namespace DetectHeadPosition
 {
+    // 補助
+    struct cam_status
+    {
+        int width;
+        int height;
+        double view_angle;
+    };
+    cam_status camera(int width, int height, double view_angle)
+    {
+        cam_status cam;
+        cam.width = width;
+        cam.height = height;
+        cam.view_angle = view_angle;
+        return cam;
+    }
     // 関数の返り値として使う構造体
     struct Setted
     {
@@ -40,6 +55,16 @@ namespace DetectHeadPosition
     struct Position
     {
         int isDetected;
+        std::string error = "";
+        struct pos
+        {
+            double x;
+            double y;
+            double z;
+            double distance;
+        };
+        pos position;
+        cv::Mat image;
     };
 
     // 本体
@@ -205,7 +230,7 @@ namespace DetectHeadPosition
             else
             {
                 // 何もなかったとき
-                // 返り値 positionは放置
+                // 返り値
                 return_setted.isSetted = -1;
                 if (isLargest == -1)
                 {
@@ -258,38 +283,30 @@ namespace DetectHeadPosition
                                         faces[isLargest].width, faces[isLargest].height);
                 HeadPosition head_pos = DescartesCoordes(face_coords, camera_info);
 
-                cout << std::fixed
-                     << std::setprecision(3) << "img_x: " << face_coords.center.x
-                     << std::setprecision(3) << "  x: " << head_pos.x
-                     << std::setprecision(3) << "  y: " << head_pos.y
-                     << std::setprecision(3) << "  z: " << head_pos.z
-                     << std::setprecision(3) << "  d: " << head_pos.distance
-                     << endl;
+                return_position.isDetected = 0;
+                return_position.image = img;
+                return_position.position.x = head_pos.x;
+                return_position.position.y = head_pos.y;
+                return_position.position.z = head_pos.z;
+                return_position.position.distance = head_pos.distance;
             }
             else
             {
                 // ! 検出なしの処理を書く
+                return_position.isDetected = -1;
+                if (isLargest == -1)
+                {
+                    return_position.error = "nothing detected";
+                }
+                else
+                {
+                    return_position.error = "unknown error";
+                }
+                return_position.image = img;
             }
+            return return_position;
         }
     };
-
-    // 補助
-    struct cam_status
-    {
-        int width;
-        int height;
-        double view_angle;
-    };
-
-    cam_status camera(int width, int height, double view_angle)
-    {
-        cam_status cam;
-        cam.width = width;
-        cam.height = height;
-        cam.view_angle = view_angle;
-        return cam;
-    }
-
 }
 
 namespace dp = DetectHeadPosition;
