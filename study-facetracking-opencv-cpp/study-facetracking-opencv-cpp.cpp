@@ -147,24 +147,6 @@ int main()
     // カスケードとラムダ式用意
     cv::CascadeClassifier cascade;
     cascade.load("../haarcascades/haarcascade_frontalface_alt2.xml");
-    auto HeadCoordes = [&cascade](cv::Mat frame) -> HeadPosition { // ! 未完成
-        // 縮小
-        cv::resize(frame, frame, cv::Size(), 0.5, 0.5);
-        // カスケード
-        std::vector<cv::Rect> faces;
-        cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
-        // 最大の検出をマーク
-        int isLargest = -1;
-        double max_size = 0;
-        for (int i = 0; i < faces.size(); i++)
-        {
-            if (faces[i].width + faces[i].height > max_size)
-            {
-                max_size = faces[i].width + faces[i].height;
-                isLargest = i;
-            }
-        }
-    };
 
     // カメラの情報と基本の位置での顔の大きさを記録しておく
     CameraInfo cam_info;
@@ -191,7 +173,7 @@ int main()
         // カスケードから矩形描画
         if (isLargest != -1)
         {
-            // ! バグテスト 後で消す
+            // バグテスト 後で消す
             if (isLargest >= faces.size() || isLargest < 0)
             {
                 cout << "something go wrong at \"isLargest\"" << endl;
@@ -221,6 +203,8 @@ int main()
         }
     }
 
+    cout << "setting passed" << endl;
+
     // テスト
     while (1)
     {
@@ -232,7 +216,7 @@ int main()
         cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
 
         // 最大の検出をマークする
-        int isLargest = 0;
+        int isLargest = -1;
         double max_size = 0;
         for (int i = 0; i < faces.size(); i++)
         {
@@ -243,17 +227,20 @@ int main()
             }
         }
 
-        // カスケードから矩形描画
-        cv::rectangle(frame, cv::Point(faces[isLargest].x, faces[isLargest].y),
-                      cv::Point(faces[isLargest].x + faces[isLargest].width,
-                                faces[isLargest].y + faces[isLargest].height),
-                      cv::Scalar(0, 0, 255), 3);
+        if (isLargest != -1)
+        {
+            // カスケードから矩形描画
+            cv::rectangle(frame, cv::Point(faces[isLargest].x, faces[isLargest].y),
+                          cv::Point(faces[isLargest].x + faces[isLargest].width,
+                                    faces[isLargest].y + faces[isLargest].height),
+                          cv::Scalar(0, 0, 255), 3);
 
-        // faces[isLargest]に対してカメラからの相対座標を計算する
-        FaceCoordinates face_coords;
-        face_coords.set_coordes(faces[isLargest].x, faces[isLargest].y,
-                                faces[isLargest].width, faces[isLargest].height);
-        HeadPosition head_pos = DescartesCoordes(face_coords, cam_info);
+            // faces[isLargest]に対してカメラからの相対座標を計算する
+            FaceCoordinates face_coords;
+            face_coords.set_coordes(faces[isLargest].x, faces[isLargest].y,
+                                    faces[isLargest].width, faces[isLargest].height);
+            HeadPosition head_pos = DescartesCoordes(face_coords, cam_info);
+        }
 
         // 描画
         cv::imshow("win", frame);
