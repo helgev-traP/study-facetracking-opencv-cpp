@@ -175,6 +175,26 @@ namespace DetectHeadPosition
             return head_pos;
         }
 
+        std::vector<cv::Rect> FastCascade(cv::Mat img, double magnification)
+        {
+            // reshape
+            cv::Mat small_img;
+            cv::resize(img, small_img, cv::Size(), magnification, magnification);
+            // cascade
+            std::vector<cv::Rect> faces;
+            cascade.detectMultiScale(small_img, faces, 1.1, 3, 0, cv::Size(20, 20));
+            // fix Rect magnification
+            for (int i = 0; i < faces.size(); i++)
+            {
+                faces[i].x /= magnification;
+                faces[i].y /= magnification;
+                faces[i].width /= magnification;
+                faces[i].height /= magnification;
+            }
+
+            return faces;
+        }
+
         // vallue
         cv::CascadeClassifier cascade;
         FaceCoordinates face_coordinates;
@@ -192,8 +212,7 @@ namespace DetectHeadPosition
             // 返り値
             Setted return_setted;
             // カスケード
-            std::vector<cv::Rect> faces;
-            cascade.detectMultiScale(img, faces, 1.1, 3, 0, cv::Size(20, 20));
+            std::vector<cv::Rect> faces = FastCascade(img, 0.5);
             // 最大の検出をマーク
             int isLargest = -1;
             double max_size = 0;
@@ -206,6 +225,7 @@ namespace DetectHeadPosition
                 }
             }
             // 分岐
+
             if (isLargest != -1)
             {
                 // 検出があるとき
@@ -214,11 +234,14 @@ namespace DetectHeadPosition
                 {
                     cout << "something go wrong at \"isLargest\"" << endl;
                 }
-
+                // !
                 cv::rectangle(img, cv::Point(faces[isLargest].x, faces[isLargest].y),
                               cv::Point(faces[isLargest].x + faces[isLargest].width,
                                         faces[isLargest].y + faces[isLargest].height),
                               cv::Scalar(0, 0, 255), 3);
+                // camera_infoに書き込む
+                camera_info.setCameraInfo(cam.width, cam.height, cam.view_angle);
+                camera_info.setPar(std_distance, faces[isLargest].width + faces[isLargest].height);
                 // 返り値 errorは放置
                 return_setted.isSetted = 0;
                 return_setted.image = img;
@@ -242,9 +265,6 @@ namespace DetectHeadPosition
                 }
                 return_setted.image = img;
             }
-            // camera_infoに書き込む
-            camera_info.setCameraInfo(cam.width, cam.height, cam.view_angle);
-            camera_info.setPar(std_distance, faces[isLargest].width + faces[isLargest].height);
             return return_setted;
         }
 
@@ -253,8 +273,7 @@ namespace DetectHeadPosition
             // 返り値
             Position return_position;
             // カスケード
-            std::vector<cv::Rect> faces;
-            cascade.detectMultiScale(img, faces, 1.1, 3, 0, cv::Size(20, 20));
+            std::vector<cv::Rect> faces = FastCascade(img, 0.5);
 
             // 最大の検出をマークする
             int isLargest = -1;
@@ -292,7 +311,6 @@ namespace DetectHeadPosition
             }
             else
             {
-                // ! 検出なしの処理を書く
                 return_position.isDetected = -1;
                 if (isLargest == -1)
                 {
@@ -313,6 +331,43 @@ namespace dp = DetectHeadPosition;
 
 int main()
 {
+    // * almost const
+    int width = 1920;
+    int height = 1080;
+    double distance = 0.5;
+    double view_angle = M_PI / 4.0;
+    // *
+    cv::VideoCapture cap(0);
+
+    if (!cap.isOpened())
+    {
+        return -1;
+    }
+
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, width);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, height);
+
+    dp::Data testData;
+
+    testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
+
+    cv::Mat frame;
+    while (1)
+    {
+        cap >> frame;
+        dp::Setted catch_result = testData.setStdPosition(frame, distance, dp::camera(width, height, view_angle));
+
+        cv::imshow("win", catch_result.image);
+
+        const int key = cv::waitKey(1);
+        if (key != -1)
+        {
+            if (catch_result.isSetted == 0)
+                break;
+            else
+                cout << "try again" << endl;
+        }
+    }
 
     cv::destroyAllWindows();
 
