@@ -46,8 +46,7 @@ namespace DetectHeadPosition
     class Data
     {
     private:
-        cv::CascadeClassifier cascade;
-
+        // class and struct
         struct FaceCoordinates
         {
             // struct
@@ -130,6 +129,29 @@ namespace DetectHeadPosition
             double distance; // 距離
         };
 
+        // function
+        HeadPosition DescartesCoordes(FaceCoordinates face, CameraInfo info)
+        // func 頭の位置検出
+        // 入力: FaceCoordinates, CameraInfo
+        // 出力: HeadPosition
+        {
+            HeadPosition head_pos;
+            head_pos.x = info.dis_x_tan *
+                         (double(face.center.x) / double(info.camera.width)) *
+                         (info.face_size / face.face_size());
+            head_pos.y = info.dis_x_tan *
+                         (double(face.center.y) / double(info.camera.width)) *
+                         (info.face_size / face.face_size());
+            head_pos.z = info.std_distance *
+                         (info.face_size / face.face_size());
+            head_pos.distance = std::sqrt(std::pow(head_pos.x, 2) +
+                                          std::pow(head_pos.y, 2) +
+                                          std::pow(head_pos.z, 2));
+            return head_pos;
+        }
+
+        // vallue
+        cv::CascadeClassifier cascade;
         FaceCoordinates face_coordinates;
         CameraInfo camera_info;
         HeadPosition head_position;
@@ -143,7 +165,7 @@ namespace DetectHeadPosition
         Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
         {
             // 返り値
-            Setted ret;
+            Setted return_setted;
             // カスケード
             std::vector<cv::Rect> faces;
             cascade.detectMultiScale(img, faces, 1.1, 3, 0, cv::Size(20, 20));
@@ -173,35 +195,82 @@ namespace DetectHeadPosition
                                         faces[isLargest].y + faces[isLargest].height),
                               cv::Scalar(0, 0, 255), 3);
                 // 返り値 errorは放置
-                ret.isSetted = 0;
-                ret.image = img;
-                ret.position.x = (faces[isLargest].x + faces[isLargest].width / 2.0) - cam.width / 2.0;
-                ret.position.y = (faces[isLargest].y + faces[isLargest].height / 2.0) - cam.height / 2.0;
-                ret.position.width = faces[isLargest].width;
-                ret.position.height = faces[isLargest].height;
+                return_setted.isSetted = 0;
+                return_setted.image = img;
+                return_setted.position.x = (faces[isLargest].x + faces[isLargest].width / 2.0) - cam.width / 2.0;
+                return_setted.position.y = (faces[isLargest].y + faces[isLargest].height / 2.0) - cam.height / 2.0;
+                return_setted.position.width = faces[isLargest].width;
+                return_setted.position.height = faces[isLargest].height;
             }
             else
             {
                 // 何もなかったとき
                 // 返り値 positionは放置
-                ret.isSetted = -1;
+                return_setted.isSetted = -1;
                 if (isLargest == -1)
                 {
-                    ret.error = "nothing detected";
+                    return_setted.error = "nothing detected";
                 }
                 else
                 {
-                    ret.error = "unknown error";
+                    return_setted.error = "unknown error";
                 }
-                ret.image = img;
+                return_setted.image = img;
             }
             // camera_infoに書き込む
             camera_info.setCameraInfo(cam.width, cam.height, cam.view_angle);
             camera_info.setPar(std_distance, faces[isLargest].width + faces[isLargest].height);
-            return ret;
+            return return_setted;
         }
 
-        Position getPosition() {}
+        Position getPosition(cv::Mat img)
+        {
+            // 返り値
+            Position return_position;
+            // カスケード
+            std::vector<cv::Rect> faces;
+            cascade.detectMultiScale(img, faces, 1.1, 3, 0, cv::Size(20, 20));
+
+            // 最大の検出をマークする
+            int isLargest = -1;
+            double max_size = 0;
+            for (int i = 0; i < faces.size(); i++)
+            {
+                if (faces[i].width + faces[i].height > max_size)
+                {
+                    max_size = faces[i].width + faces[i].height;
+                    isLargest = i;
+                }
+            }
+
+            if (isLargest != -1)
+            {
+                // カスケードから矩形描画
+                cv::rectangle(img, cv::Point(faces[isLargest].x, faces[isLargest].y),
+                              cv::Point(faces[isLargest].x + faces[isLargest].width,
+                                        faces[isLargest].y + faces[isLargest].height),
+                              cv::Scalar(0, 0, 255), 3);
+
+                // faces[isLargest]に対してカメラからの相対座標を計算する
+                FaceCoordinates face_coords;
+                face_coords.set_coordes(faces[isLargest].x - camera_info.camera.width / 2.0,
+                                        faces[isLargest].y - camera_info.camera.height / 2.0,
+                                        faces[isLargest].width, faces[isLargest].height);
+                HeadPosition head_pos = DescartesCoordes(face_coords, camera_info);
+
+                cout << std::fixed
+                     << std::setprecision(3) << "img_x: " << face_coords.center.x
+                     << std::setprecision(3) << "  x: " << head_pos.x
+                     << std::setprecision(3) << "  y: " << head_pos.y
+                     << std::setprecision(3) << "  z: " << head_pos.z
+                     << std::setprecision(3) << "  d: " << head_pos.distance
+                     << endl;
+            }
+            else
+            {
+                // ! 検出なしの処理を書く
+            }
+        }
     };
 
     // 補助
