@@ -5,6 +5,7 @@
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <string>
+#include <iomanip>
 // container
 #include <vector>
 // math
@@ -111,13 +112,14 @@ HeadPosition DescartesCoordes(FaceCoordinates face, CameraInfo info)
 // 出力: HeadPosition
 {
     HeadPosition head_pos;
-    head_pos.x = info.std_distance * info.dis_x_tan *
-                 (face.center.x / info.camera.width) *
+    head_pos.x = info.dis_x_tan *
+                 (double(face.center.x) / double(info.camera.width)) *
                  (info.face_size / face.face_size());
-    head_pos.y = info.std_distance * info.dis_x_tan *
-                 (face.center.y / info.camera.width) *
+    head_pos.y = info.dis_x_tan *
+                 (double(face.center.y) / double(info.camera.width)) *
                  (info.face_size / face.face_size());
-    head_pos.z = info.std_distance * (info.face_size / face.face_size());
+    head_pos.z = info.std_distance *
+                 (info.face_size / face.face_size());
     head_pos.distance = std::sqrt(std::pow(head_pos.x, 2) +
                                   std::pow(head_pos.y, 2) +
                                   std::pow(head_pos.z, 2));
@@ -150,7 +152,7 @@ int main()
 
     // カメラの情報と基本の位置での顔の大きさを記録しておく
     CameraInfo cam_info;
-    cam_info.setCameraInfo(1920, 1080, M_PI / 2.0);
+    cam_info.setCameraInfo(1920, 1080, M_PI / 4.0);
 
     while (1)
     {
@@ -204,6 +206,7 @@ int main()
     }
 
     cout << "setting passed" << endl;
+    cout << "dis_x_tan = " << cam_info.dis_x_tan << endl;
 
     // テスト
     while (1)
@@ -237,9 +240,18 @@ int main()
 
             // faces[isLargest]に対してカメラからの相対座標を計算する
             FaceCoordinates face_coords;
-            face_coords.set_coordes(faces[isLargest].x, faces[isLargest].y,
+            face_coords.set_coordes(faces[isLargest].x - cam_info.camera.width / 2.0,
+                                    faces[isLargest].y - cam_info.camera.height / 2.0,
                                     faces[isLargest].width, faces[isLargest].height);
             HeadPosition head_pos = DescartesCoordes(face_coords, cam_info);
+
+            cout << std::fixed
+                 << std::setprecision(3) << "img_x: " << face_coords.center.x
+                 << std::setprecision(3) << "  x: " << head_pos.x
+                 << std::setprecision(3) << "  y: " << head_pos.y
+                 << std::setprecision(3) << "  z: " << head_pos.z
+                 << std::setprecision(3) << "  d: " << head_pos.distance
+                 << endl;
         }
 
         // 描画
