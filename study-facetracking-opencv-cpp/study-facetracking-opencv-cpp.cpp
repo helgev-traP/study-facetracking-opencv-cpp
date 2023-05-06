@@ -1,4 +1,8 @@
-﻿#define _USE_MATH_DEFINES
+﻿// func 関数の機能の説明
+// ! 最終的に直されるべき箇所・注意
+// * ほぼ定数(解像度に関する値・画角など)
+
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <string>
 // container
@@ -93,15 +97,15 @@ public:
 
 struct HeadPosition
 {
-    double x; // 水平 右側が正
-    double y; // 鉛直 上が正
-    double z; // 奥行
-    // double distance; // 距離
+    double x;        // 水平 右側が正
+    double y;        // 鉛直 上が正
+    double z;        // 奥行
+    double distance; // 距離
 };
 
 // --- function
 
-HeadPosition PolerCoordes(FaceCoordinates face, CameraInfo info)
+HeadPosition DescartesCoordes(FaceCoordinates face, CameraInfo info)
 // func 頭の位置検出
 // 入力: FaceCoordinates, CameraInfo
 // 出力: HeadPosition
@@ -114,6 +118,9 @@ HeadPosition PolerCoordes(FaceCoordinates face, CameraInfo info)
                  (face.center.y / info.camera.width) *
                  (info.face_size / face.face_size());
     head_pos.z = info.std_distance * (info.face_size / face.face_size());
+    head_pos.distance = std::sqrt(std::pow(head_pos.x, 2) +
+                                  std::pow(head_pos.y, 2) +
+                                  std::pow(head_pos.z, 2));
     return head_pos;
 }
 
@@ -137,8 +144,27 @@ int main()
 
     cv::Mat frame;
 
+    // カスケードとラムダ式用意
     cv::CascadeClassifier cascade;
     cascade.load("../haarcascades/haarcascade_frontalface_alt2.xml");
+    auto HeadCoordes = [&cascade](cv::Mat frame) -> HeadPosition { // ! 未完成
+        // 縮小
+        cv::resize(frame, frame, cv::Size(), 0.5, 0.5);
+        // カスケード
+        std::vector<cv::Rect> faces;
+        cascade.detectMultiScale(frame, faces, 1.1, 3, 0, cv::Size(20, 20));
+        // 最大の検出をマーク
+        int isLargest = -1;
+        double max_size = 0;
+        for (int i = 0; i < faces.size(); i++)
+        {
+            if (faces[i].width + faces[i].height > max_size)
+            {
+                max_size = faces[i].width + faces[i].height;
+                isLargest = i;
+            }
+        }
+    };
 
     // カメラの情報と基本の位置での顔の大きさを記録しておく
     CameraInfo cam_info;
@@ -227,7 +253,7 @@ int main()
         FaceCoordinates face_coords;
         face_coords.set_coordes(faces[isLargest].x, faces[isLargest].y,
                                 faces[isLargest].width, faces[isLargest].height);
-        HeadPosition head_pos = PolerCoordes(face_coords, cam_info);
+        HeadPosition head_pos = DescartesCoordes(face_coords, cam_info);
 
         // 描画
         cv::imshow("win", frame);
