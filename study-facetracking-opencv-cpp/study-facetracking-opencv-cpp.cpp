@@ -334,7 +334,7 @@ int main()
     // * almost const
     int width = 1920;
     int height = 1080;
-    double distance = 0.5;
+    double distance = 0.3;
     double view_angle = M_PI / 4.0;
     // *
     cv::VideoCapture cap(0);
@@ -367,6 +367,25 @@ int main()
             else
                 cout << "try again" << endl;
         }
+    }
+    cout << "setting passed" << endl;
+    while (1)
+    {
+        cap >> frame;
+
+        dp::Position head_position = testData.getPosition(frame);
+
+        cout << std::fixed
+             << std::setprecision(3) << "  x: " << head_position.position.x
+             << std::setprecision(3) << "  y: " << head_position.position.y
+             << std::setprecision(3) << "  z: " << head_position.position.z
+             << std::setprecision(3) << "  d: " << head_position.position.distance
+             << endl;
+
+        cv::imshow("win", head_position.image);
+        const int key = cv::waitKey(1);
+        if (key != -1)
+            break;
     }
 
     cv::destroyAllWindows();

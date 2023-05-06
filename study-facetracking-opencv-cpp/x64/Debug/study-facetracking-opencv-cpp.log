@@ -23,6 +23,6 @@ C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp
           ]
 C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(248,96): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
 C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(249,97): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(301,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
 C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(300,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(299,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
   study-facetracking-opencv-cpp.vcxproj -> C:\0_program\studies\study-facetracking-opencv-cpp\x64\Debug\study-facetracking-opencv-cpp.exe
