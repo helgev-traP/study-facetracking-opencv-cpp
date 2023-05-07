@@ -195,13 +195,15 @@ namespace DetectHeadPosition
             return faces;
         }
 
-        // vallue
+        // var
         cv::CascadeClassifier cascade;
         FaceCoordinates face_coordinates;
         CameraInfo camera_info;
         HeadPosition head_position;
+        double fast_cascade_magnification = 0.25;
 
     public:
+        // main
         void setCascade(std::string path)
         {
             cascade.load(path);
@@ -212,7 +214,7 @@ namespace DetectHeadPosition
             // 返り値
             Setted return_setted;
             // カスケード
-            std::vector<cv::Rect> faces = FastCascade(img, 0.5);
+            std::vector<cv::Rect> faces = FastCascade(img, fast_cascade_magnification);
             // 最大の検出をマーク
             int isLargest = -1;
             double max_size = 0;
@@ -273,7 +275,7 @@ namespace DetectHeadPosition
             // 返り値
             Position return_position;
             // カスケード
-            std::vector<cv::Rect> faces = FastCascade(img, 0.5);
+            std::vector<cv::Rect> faces = FastCascade(img, fast_cascade_magnification);
 
             // 最大の検出をマークする
             int isLargest = -1;
@@ -324,6 +326,12 @@ namespace DetectHeadPosition
             }
             return return_position;
         }
+
+        // setVar
+        void setFastCascadeMagnification(double m)
+        {
+            fast_cascade_magnification = m;
+        }
     };
 }
 
@@ -368,6 +376,7 @@ int main()
                 cout << "try again" << endl;
         }
     }
+
     cout << "setting passed" << endl;
     while (1)
     {
