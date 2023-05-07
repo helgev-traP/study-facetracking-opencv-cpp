@@ -342,7 +342,7 @@ int main()
     // * almost const
     int width = 1920;
     int height = 1080;
-    double distance = 0.3;
+    double distance = 0.5;
     double view_angle = M_PI / 4.0;
     // *
     cv::VideoCapture cap(0);
@@ -358,6 +358,7 @@ int main()
     dp::Data testData;
 
     testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
+    testData.setFastCascadeMagnification(1.0 / 8.0);
 
     cv::Mat frame;
     while (1)
