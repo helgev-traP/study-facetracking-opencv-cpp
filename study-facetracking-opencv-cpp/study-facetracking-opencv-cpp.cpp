@@ -22,7 +22,7 @@ using std::endl;
 
 namespace DetectHeadPosition
 {
-    // 補助
+    // 補助。Setterに構造体まるごと渡すためのもの
     struct cam_status
     {
         int width;
@@ -111,7 +111,13 @@ namespace DetectHeadPosition
                 int height;
                 double angle_of_view;
             };
+            struct Amplifire
+            {
+                double x = 1.0;
+                double y = 1.0;
+            }
             Camera camera;
+            Amplifire amp;
             // カメラの正面で、Ncm離したときの顔の大きさ(縦横の平均)
             double std_distance;
             double face_size;
@@ -208,6 +214,9 @@ namespace DetectHeadPosition
         {
             cascade.load(path);
         }
+        
+        // ! 名前後で考える
+        void setAmp()
 
         Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
         {
