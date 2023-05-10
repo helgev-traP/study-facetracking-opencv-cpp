@@ -1,4 +1,4 @@
-﻿// func 関数の機能の説明
+// func 関数の機能の説明
 // ! 最終的に直されるべき箇所・注意
 // * ほぼ定数(解像度に関する値・画角など)
 
@@ -216,7 +216,11 @@ namespace DetectHeadPosition
         }
         
         // ! 名前後で考える
-        void setAmp()
+        void setAmp(double x, double y)
+        {
+            camera_info.amp.x = x;
+            camera_info.amp.y = y;
+        }
 
         Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
         {
