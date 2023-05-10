@@ -215,7 +215,7 @@ namespace DetectHeadPosition
             cascade.load(path);
         }
         
-        // ! 名前後で考える
+        // ! 名前後で考える setVar移すに
         void setAmp(double x, double y)
         {
             camera_info.amp.x = x;
@@ -319,8 +319,8 @@ namespace DetectHeadPosition
 
                 return_position.isDetected = 0;
                 return_position.image = img;
-                return_position.position.x = head_pos.x;
-                return_position.position.y = head_pos.y;
+                return_position.position.x = head_pos.x * camera_info.amp.x;
+                return_position.position.y = head_pos.y * camera_info.amp.y;
                 return_position.position.z = head_pos.z;
                 return_position.position.distance = head_pos.distance;
             }
