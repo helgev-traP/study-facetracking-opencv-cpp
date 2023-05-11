@@ -1,4 +1,4 @@
-﻿// func 関数の機能の説明
+// func 関数の機能の説明
 // ! 最終的に直されるべき箇所・注意
 // * ほぼ定数(解像度に関する値・画角など)
 
@@ -24,7 +24,7 @@ using std::endl;
 
 namespace DetectHeadPosition
 {
-    // 補助
+    // 補助。Setterに構造体まるごと渡すためのもの
     struct cam_status
     {
         int width;
@@ -113,7 +113,13 @@ namespace DetectHeadPosition
                 int height;
                 double angle_of_view;
             };
+            struct Amplifire
+            {
+                double x = 1.0;
+                double y = 1.0;
+            };
             Camera camera;
+            Amplifire amp;
             // カメラの正面で、Ncm離したときの顔の大きさ(縦横の平均)
             double std_distance;
             double face_size;
@@ -206,12 +212,14 @@ namespace DetectHeadPosition
 
     public:
         // main
+
+        // カスケードデータ
         void setCascade(std::string path)
         {
             cascade.load(path);
         }
 
-        Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
+        Setted setStdPositionCenter(cv::Mat img, double std_distance, cam_status cam)
         {
             // 返り値
             Setted return_setted;
@@ -308,8 +316,8 @@ namespace DetectHeadPosition
 
                 return_position.isDetected = 0;
                 return_position.image = img;
-                return_position.position.x = head_pos.x;
-                return_position.position.y = head_pos.y;
+                return_position.position.x = head_pos.x * camera_info.amp.x;
+                return_position.position.y = head_pos.y * camera_info.amp.y;
                 return_position.position.z = head_pos.z;
                 return_position.position.distance = head_pos.distance;
             }
@@ -333,6 +341,17 @@ namespace DetectHeadPosition
         void setFastCascadeMagnification(double m)
         {
             fast_cascade_magnification = m;
+        }
+
+        // ! 名前後で考える
+        void setAmpVer(double x, double y)
+        {
+            camera_info.amp.x = x;
+            camera_info.amp.y = y;
+        }
+        // ! もしsetAmpを関数の中に直接書けそうならそうする
+        void setAmp()
+        {
         }
     };
 }
@@ -368,10 +387,11 @@ int main()
     testData.setFastCascadeMagnification(1.0 / 8.0);
 
     cv::Mat frame;
+    // 距離の規定値
     while (1)
     {
         cap >> frame;
-        dp::Setted catch_result = testData.setStdPosition(frame, distance, dp::camera(width, height, view_angle));
+        dp::Setted catch_result = testData.setStdPositionCenter(frame, distance, dp::camera(width, height, view_angle));
 
         cv::imshow("win", catch_result.image);
 
@@ -401,8 +421,14 @@ int main()
 
         cv::imshow("win", head_position.image);
         const int key = cv::waitKey(1);
-        if (key != -1)
+        if (key == 101)
+        {
+            // 倍率を変えるいい感じのもの
+        }
+        else if (key == 113)
+        {
             break;
+        }
     }
 
     cv::destroyAllWindows();
