@@ -115,7 +115,7 @@ namespace DetectHeadPosition
             {
                 double x = 1.0;
                 double y = 1.0;
-            }
+            };
             Camera camera;
             Amplifire amp;
             // カメラの正面で、Ncm離したときの顔の大きさ(縦横の平均)
@@ -210,19 +210,14 @@ namespace DetectHeadPosition
 
     public:
         // main
+
+        // カスケードデータ
         void setCascade(std::string path)
         {
             cascade.load(path);
         }
-        
-        // ! 名前後で考える setVar移すに
-        void setAmp(double x, double y)
-        {
-            camera_info.amp.x = x;
-            camera_info.amp.y = y;
-        }
 
-        Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
+        Setted setStdPositionCenter(cv::Mat img, double std_distance, cam_status cam)
         {
             // 返り値
             Setted return_setted;
@@ -345,6 +340,17 @@ namespace DetectHeadPosition
         {
             fast_cascade_magnification = m;
         }
+
+        // ! 名前後で考える
+        void setAmpVer(double x, double y)
+        {
+            camera_info.amp.x = x;
+            camera_info.amp.y = y;
+        }
+        // ! もしsetAmpを関数の中に直接書けそうならそうする
+        void setAmp()
+        {
+        }
     };
 }
 
@@ -374,10 +380,11 @@ int main()
     testData.setFastCascadeMagnification(1.0 / 8.0);
 
     cv::Mat frame;
+    // 距離の規定値
     while (1)
     {
         cap >> frame;
-        dp::Setted catch_result = testData.setStdPosition(frame, distance, dp::camera(width, height, view_angle));
+        dp::Setted catch_result = testData.setStdPositionCenter(frame, distance, dp::camera(width, height, view_angle));
 
         cv::imshow("win", catch_result.image);
 
@@ -407,8 +414,14 @@ int main()
 
         cv::imshow("win", head_position.image);
         const int key = cv::waitKey(1);
-        if (key != -1)
+        if (key == 101)
+        {
+            // 倍率を変えるいい感じのもの
+        }
+        else if (key == 113)
+        {
             break;
+        }
     }
 
     cv::destroyAllWindows();
