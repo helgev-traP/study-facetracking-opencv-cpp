@@ -10,6 +10,8 @@
 #include <vector>
 // math
 #include <cmath>
+// filesystem
+#include <filesystem>
 // OpenCV
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
@@ -339,6 +341,8 @@ namespace dp = DetectHeadPosition;
 
 int main()
 {
+    cout << std::filesystem::current_path() << endl;
+    cv::waitKey(0);
     // * almost const
     int width = 1920;
     int height = 1080;
@@ -357,7 +361,10 @@ int main()
 
     dp::Data testData;
 
-    testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
+    // for IDE
+    // testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
+    // for release
+    testData.setCascade("C:/0_sandbox/haarcascade_frontalface_alt2.xml");
     testData.setFastCascadeMagnification(1.0 / 8.0);
 
     cv::Mat frame;

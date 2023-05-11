@@ -1,8 +1,32 @@
 ﻿  study-facetracking-opencv-cpp.cpp
 C:\pl-lib\Cpp\opencv\build\include\opencv2\calib3d.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
 C:\pl-lib\Cpp\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(191,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Tp=int
+          ]
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(192,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Tp=int
+          ]
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(193,35): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Tp=int
+          ]
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(194,36): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+          with
+          [
+              _Tp=int
+          ]
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(252,96): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(253,97): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(305,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(304,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
   コード生成しています。
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 105 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB not found, fall back to full compilation.
+  All 323 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
-  study-facetracking-opencv-cpp.vcxproj -> C:\0_Program\studies\study-facetracking-opencv-cpp\x64\Release\study-facetracking-opencv-cpp.exe
+  study-facetracking-opencv-cpp.vcxproj -> C:\0_program\studies\study-facetracking-opencv-cpp\x64\Release\study-facetracking-opencv-cpp.exe
