@@ -1,28 +1,28 @@
 ﻿  study-facetracking-opencv-cpp.cpp
 C:\pl-lib\Cpp\opencv\build\include\opencv2\calib3d.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
 C:\pl-lib\Cpp\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(189,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(211,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
           with
           [
               _Tp=int
           ]
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(190,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(212,31): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
           with
           [
               _Tp=int
           ]
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(191,35): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(213,35): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
           with
           [
               _Tp=int
           ]
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(192,36): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(214,36): warning C4244: '/=': 'double' から '_Tp' への変換です。データが失われる可能性があります。
           with
           [
               _Tp=int
           ]
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(250,96): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(251,97): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(303,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
-C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(302,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(275,96): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(276,97): warning C4244: '=': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(329,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+C:\0_program\studies\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp\study-facetracking-opencv-cpp.cpp(328,60): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
   study-facetracking-opencv-cpp.vcxproj -> C:\0_program\studies\study-facetracking-opencv-cpp\x64\Debug\study-facetracking-opencv-cpp.exe

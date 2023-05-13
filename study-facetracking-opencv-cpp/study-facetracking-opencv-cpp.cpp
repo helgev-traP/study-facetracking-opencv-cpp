@@ -359,21 +359,29 @@ namespace DetectHeadPosition
             fast_cascade_magnification = m;
         }
 
-        // ! 名前後で考える
         void setAmp(Amp setter)
         {
+            // amplifire(double x, double y)で渡してくる
             camera_info.amp.x = setter.x;
             camera_info.amp.y = setter.y;
         }
+
         Amp getAmp()
         {
-            // ! やっぱり構造体で渡そう
-            //   setAmpの受け渡しも構造体にするかも？
-            //   呼び出し側めんどくさいかも
             Amp amp_return;
             amp_return.x = camera_info.amp.x;
             amp_return.y = camera_info.amp.y;
             return amp_return;
+        }
+
+        void setAngleOfView(double aov)
+        {
+            camera_info.camera.angle_of_view = aov;
+        }
+
+        double getAngleOfView()
+        {
+            return camera_info.camera.angle_of_view;
         }
     };
 }
@@ -445,16 +453,38 @@ int main()
         const int key = cv::waitKey(1);
         if (key == 101 /*e*/)
         {
+            double x = testData.getAmp().x;
+            double y = testData.getAmp().y;
             cout << "set xy amplifire." << endl
                  << "current value is:" << endl
-                 << "x: " << testData.getAmp().x << "  y: " << testData.getAmp().y << endl;
-            double x;
-            double y;
+                 << "x: " << x << "  y: " << y << endl;
+
+            std::string input;
+
             cout << "new value:" << endl
                  << "x -> ";
-            cin >> x;
+            cin >> input;
+            if (input[0] == 120 || input[0] == 88)
+            // 'x' or 'X'
+            {
+                x *= stod(input.substr(1));
+            }
+            else
+            {
+                x = stod(input);
+            }
+
             cout << "y -> ";
-            cin >> y;
+            cin >> input;
+            if (input[0] == 120 || input[0] == 88)
+            // 'x' or 'X'
+            {
+                y *= stod(input.substr(1));
+            }
+            else
+            {
+                y = stod(input);
+            }
             testData.setAmp(dp::amplifire(x, y));
         }
         else if (key == 113 /*q*/)
