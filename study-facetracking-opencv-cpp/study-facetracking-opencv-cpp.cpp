@@ -1,4 +1,4 @@
-// func 関数の機能の説明
+﻿// func 関数の機能の説明
 // ! 最終的に直されるべき箇所・注意
 // * ほぼ定数(解像度に関する値・画角など)
 
@@ -14,7 +14,6 @@
 #include <filesystem>
 // OpenCV
 #include <opencv2/opencv.hpp>
-#include <opencv2/highgui.hpp>
 
 using std::cin;
 using std::cout;
@@ -24,22 +23,7 @@ using std::endl;
 
 namespace DetectHeadPosition
 {
-    // 補助。Setterに構造体まるごと渡すためのもの
-    struct cam_status
-    {
-        int width;
-        int height;
-        double view_angle;
-    };
-    cam_status camera(int width, int height, double view_angle)
-    {
-        cam_status cam;
-        cam.width = width;
-        cam.height = height;
-        cam.view_angle = view_angle;
-        return cam;
-    }
-    // 関数の返り値として使う構造体
+    // 関数に渡したり、返り値として使う構造体
     struct Setted
     {
         int isSetted;
@@ -68,6 +52,36 @@ namespace DetectHeadPosition
         pos position;
         cv::Mat image;
     };
+    struct Amp
+    {
+        double x;
+        double y;
+    };
+    struct cam_status
+    {
+        int width;
+        int height;
+        double view_angle;
+    };
+
+    // setStdPositioに渡す
+    cam_status camera(int width, int height, double view_angle)
+    {
+        cam_status cam;
+        cam.width = width;
+        cam.height = height;
+        cam.view_angle = view_angle;
+        return cam;
+    }
+
+    // setAmpに渡す
+    Amp amplifire(double x, double y)
+    {
+        Amp amp_return;
+        amp_return.x = x;
+        amp_return.y = y;
+        return amp_return;
+    }
 
     // 本体
     class Data
@@ -219,7 +233,8 @@ namespace DetectHeadPosition
             cascade.load(path);
         }
 
-        Setted setStdPositionCenter(cv::Mat img, double std_distance, cam_status cam)
+        // 呼び出しもとではautoを推奨
+        Setted setStdPosition(cv::Mat img, double std_distance, cam_status cam)
         {
             // 返り値
             Setted return_setted;
@@ -280,6 +295,7 @@ namespace DetectHeadPosition
             return return_setted;
         }
 
+        // auto 推奨
         Position getPosition(cv::Mat img)
         {
             // 返り値
@@ -344,14 +360,20 @@ namespace DetectHeadPosition
         }
 
         // ! 名前後で考える
-        void setAmpVer(double x, double y)
+        void setAmp(Amp setter)
         {
-            camera_info.amp.x = x;
-            camera_info.amp.y = y;
+            camera_info.amp.x = setter.x;
+            camera_info.amp.y = setter.y;
         }
-        // ! もしsetAmpを関数の中に直接書けそうならそうする
-        void setAmp()
+        Amp getAmp()
         {
+            // ! やっぱり構造体で渡そう
+            //   setAmpの受け渡しも構造体にするかも？
+            //   呼び出し側めんどくさいかも
+            Amp amp_return;
+            amp_return.x = camera_info.amp.x;
+            amp_return.y = camera_info.amp.y;
+            return amp_return;
         }
     };
 }
@@ -381,9 +403,9 @@ int main()
     dp::Data testData;
 
     // for IDE
-    // testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
+    testData.setCascade("../haarcascades/haarcascade_frontalface_alt2.xml");
     // for release
-    testData.setCascade("C:/0_sandbox/haarcascade_frontalface_alt2.xml");
+    // testData.setCascade("C:/0_sandbox/haarcascade_frontalface_alt2.xml");
     testData.setFastCascadeMagnification(1.0 / 8.0);
 
     cv::Mat frame;
@@ -391,7 +413,7 @@ int main()
     while (1)
     {
         cap >> frame;
-        dp::Setted catch_result = testData.setStdPositionCenter(frame, distance, dp::camera(width, height, view_angle));
+        dp::Setted catch_result = testData.setStdPosition(frame, distance, dp::camera(width, height, view_angle));
 
         cv::imshow("win", catch_result.image);
 
@@ -421,11 +443,21 @@ int main()
 
         cv::imshow("win", head_position.image);
         const int key = cv::waitKey(1);
-        if (key == 101)
+        if (key == 101 /*e*/)
         {
-            // 倍率を変えるいい感じのもの
+            cout << "set xy amplifire." << endl
+                 << "current value is:" << endl
+                 << "x: " << testData.getAmp().x << "  y: " << testData.getAmp().y << endl;
+            double x;
+            double y;
+            cout << "new value:" << endl
+                 << "x -> ";
+            cin >> x;
+            cout << "y -> ";
+            cin >> y;
+            testData.setAmp(dp::amplifire(x, y));
         }
-        else if (key == 113)
+        else if (key == 113 /*q*/)
         {
             break;
         }
