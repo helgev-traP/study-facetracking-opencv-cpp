@@ -23,7 +23,8 @@ using std::endl;
 
 namespace DetectHeadPosition
 {
-    // 関数に渡したり、返り値として使う構造体
+    // # 外部入出力
+    // ## 関数に渡したり、返り値として使う構造体
     struct Setted
     {
         int isSetted;
@@ -64,7 +65,7 @@ namespace DetectHeadPosition
         double view_angle;
     };
 
-    // setStdPositioに渡す
+    // ## setStdPositioに渡す
     cam_status camera(int width, int height, double view_angle)
     {
         cam_status cam;
@@ -74,7 +75,7 @@ namespace DetectHeadPosition
         return cam;
     }
 
-    // setAmpに渡す
+    // ## setAmpに渡す
     Amp amplifire(double x, double y)
     {
         Amp amp_return;
@@ -83,7 +84,7 @@ namespace DetectHeadPosition
         return amp_return;
     }
 
-    // 本体
+    // # 本体
     class Data
     {
     private:
@@ -225,7 +226,7 @@ namespace DetectHeadPosition
         double fast_cascade_magnification = 0.25;
 
     public:
-        // main
+        // ## main
 
         // カスケードデータ
         void setCascade(std::string path)
@@ -353,7 +354,7 @@ namespace DetectHeadPosition
             return return_position;
         }
 
-        // setVar
+        // ## パラメータ調整など
         void setFastCascadeMagnification(double m)
         {
             fast_cascade_magnification = m;
