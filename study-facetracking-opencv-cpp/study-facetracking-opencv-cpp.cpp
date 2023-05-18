@@ -224,6 +224,7 @@ namespace DetectHeadPosition
         CameraInfo camera_info;
         HeadPosition head_position;
         double fast_cascade_magnification = 0.25;
+        int position_average_frame = 1;
 
     public:
         // ## main
@@ -352,6 +353,48 @@ namespace DetectHeadPosition
                 return_position.image = img;
             }
             return return_position;
+        }
+
+        // 構造体いじらないで画像だけ返したいとき(setStdPositionに統合するかも)
+        cv::Mat onlyPositionImage(cv::Mat img)
+        {
+            // 返り値はimgをそのまま使う
+            // カスケード
+            std::vector<cv::Rect> faces = FastCascade(img, fast_cascade_magnification);
+
+            // 最大の検出をマークする
+            int isLargest = -1;
+            double max_size = 0;
+            for (int i = 0; i < faces.size(); i++)
+            {
+                if (faces[i].width + faces[i].height > max_size)
+                {
+                    max_size = faces[i].width + faces[i].height;
+                    isLargest = i;
+                }
+            }
+
+            // カスケードから矩形描画
+            if (isLargest != -1)
+            {
+                // 最大でない検出の描画
+                for (int i = 0; i < faces.size(); i++)
+                {
+                    if (i == isLargest)
+                        continue;
+                    cv::rectangle(img, cv::Point(faces[i].x, faces[i].y),
+                                  cv::Point(faces[i].x + faces[i].width,
+                                            faces[i].y + faces[i].height),
+                                  cv::Scalar(0, 255, 0), 1 /*<-もしかしたら線幅かも*/);
+                }
+
+                // 最大の検出の描画
+                cv::rectangle(img, cv::Point(faces[isLargest].x, faces[isLargest].y),
+                              cv::Point(faces[isLargest].x + faces[isLargest].width,
+                                        faces[isLargest].y + faces[isLargest].height),
+                              cv::Scalar(0, 0, 255), 3);
+            }
+            return img;
         }
 
         // ## パラメータ調整など
