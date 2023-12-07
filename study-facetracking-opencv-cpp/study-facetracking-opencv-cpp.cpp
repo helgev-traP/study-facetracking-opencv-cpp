@@ -65,7 +65,7 @@ namespace DetectHeadPosition
         double view_angle;
     };
 
-    // ## setStdPositioに渡す
+    // ## setStdPositionに渡す
     cam_status camera(int width, int height, double view_angle)
     {
         cam_status cam;
@@ -76,7 +76,7 @@ namespace DetectHeadPosition
     }
 
     // ## setAmpに渡す
-    Amp amplifire(double x, double y)
+    Amp amplifier(double x, double y)
     {
         Amp amp_return;
         amp_return.x = x;
@@ -128,13 +128,13 @@ namespace DetectHeadPosition
                 int height;
                 double angle_of_view;
             };
-            struct Amplifire
+            struct Amplifier
             {
                 double x = 1.0;
                 double y = 1.0;
             };
             Camera camera;
-            Amplifire amp;
+            Amplifier amp;
             // カメラの正面で、Ncm離したときの顔の大きさ(縦横の平均)
             double std_distance;
             double face_size;
@@ -405,7 +405,7 @@ namespace DetectHeadPosition
 
         void setAmp(Amp setter)
         {
-            // amplifire(double x, double y)で渡してくる
+            // amplifier(double x, double y)で渡してくる
             camera_info.amp.x = setter.x;
             camera_info.amp.y = setter.y;
         }
@@ -499,7 +499,7 @@ int main()
         {
             double x = testData.getAmp().x;
             double y = testData.getAmp().y;
-            cout << "set xy amplifire." << endl
+            cout << "set xy amplifier." << endl
                  << "current value is:" << endl
                  << "x: " << x << "  y: " << y << endl;
 
@@ -529,7 +529,7 @@ int main()
             {
                 y = stod(input);
             }
-            testData.setAmp(dp::amplifire(x, y));
+            testData.setAmp(dp::amplifier(x, y));
         }
         else if (key == 113 /*q*/)
         {

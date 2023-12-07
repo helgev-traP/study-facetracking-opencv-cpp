@@ -76,5 +76,10 @@
         "xutility": "cpp",
         "filesystem": "cpp",
         "unordered_set": "cpp"
-    }
+    },
+    "cSpell.words": [
+        "frontalface",
+        "haarcascade",
+        "haarcascades"
+    ]
 }
